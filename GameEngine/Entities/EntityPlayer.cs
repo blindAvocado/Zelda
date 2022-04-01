@@ -19,6 +19,8 @@ namespace Zelda
             this.keys = 0;
             this.bombs = 0;
             this.coins = 0;
+
+            Room.collisionEvent += CancelMove;
         }
 
         public int KeysCount { get { return this.keys; } }

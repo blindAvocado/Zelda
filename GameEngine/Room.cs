@@ -87,10 +87,7 @@ namespace Zelda
                     CollisionInfo info = entity.CollisionWith(block);
                     if (info.isCollision)
                     {
-                        Room.collisionEvent += entity.CancelMove;
                         collisionEvent?.Invoke(info.offset);
-                        Room.collisionEvent -= entity.CancelMove;
-                        //entity.CancelMove(info.offset);
                     }
                 }
 
@@ -102,10 +99,7 @@ namespace Zelda
                     CollisionInfo info = entity.CollisionWith(block);
                     if (info.isCollision)
                     {
-                        Room.collisionEvent += entity.CancelMove;
                         collisionEvent?.Invoke(info.offset);
-                        Room.collisionEvent -= entity.CancelMove;
-                        //entity.CancelMove(info.offset);
                     }
                 }
 
