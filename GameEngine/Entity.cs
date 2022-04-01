@@ -23,6 +23,7 @@ namespace Zelda
             this.sprite = sprite;
             this.hitbox = new Rectangle(x, y, this.sprite.Width, this.sprite.Height);
             this.hasMoved = false;
+
         }
 
         public bool HasMoved { get { return this.hasMoved; } }
@@ -43,6 +44,7 @@ namespace Zelda
             int x = (int)intersectionDepth.X;
             int y = (int)intersectionDepth.Y;
 
+            Console.WriteLine(this);
 
             if (Math.Abs(x) > Math.Abs(y))
                 this.hitbox.Y += y;

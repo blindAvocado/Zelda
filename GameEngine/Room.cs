@@ -16,6 +16,9 @@ namespace Zelda
         private Block[,] blocks;
         private List<Entity> entities;
 
+        public static event Action<Vector2> collisionEvent;
+
+
         public Room()
         {
             this.roomBorder = new Sprite("room_border", 0, Settings.SCREEN_HEIGHT - 168);
@@ -41,6 +44,7 @@ namespace Zelda
             }
 
             this.blocks[4, 4] = new BlockWall(4, 4);
+
         }
 
         public void Spawn(Entity entity, int roomX, int roomY)
@@ -63,18 +67,18 @@ namespace Zelda
                 if (!entity.HasMoved)
                     continue;
 
-                foreach (Entity other in this.entities)
-                {
-                    if (entity == other)
-                        continue;
+                //foreach (Entity other in this.entities)
+                //{
+                //    if (entity == other)
+                //        continue;
 
-                    CollisionInfo info = entity.CollisionWith(other);
-                    if (info.isCollision)
-                    {
-                        if (entity.OnCollision(other))
-                            entity.CancelMove(info.offset);
-                    }
-                }
+                //    CollisionInfo info = entity.CollisionWith(other);
+                //    if (info.isCollision)
+                //    {
+                //        if (entity.OnCollision(other))
+                //            entity.CancelMove(info.offset);
+                //    }
+                //}
                 foreach (Block block in this.blocks)
                 {
                     if (block.IsWalkable())
@@ -82,7 +86,12 @@ namespace Zelda
 
                     CollisionInfo info = entity.CollisionWith(block);
                     if (info.isCollision)
-                        entity.CancelMove(info.offset);
+                    {
+                        Room.collisionEvent += entity.CancelMove;
+                        collisionEvent?.Invoke(info.offset);
+                        Room.collisionEvent -= entity.CancelMove;
+                        //entity.CancelMove(info.offset);
+                    }
                 }
 
                 foreach (Block block in this.border)
@@ -92,7 +101,12 @@ namespace Zelda
 
                     CollisionInfo info = entity.CollisionWith(block);
                     if (info.isCollision)
-                        entity.CancelMove(info.offset);
+                    {
+                        Room.collisionEvent += entity.CancelMove;
+                        collisionEvent?.Invoke(info.offset);
+                        Room.collisionEvent -= entity.CancelMove;
+                        //entity.CancelMove(info.offset);
+                    }
                 }
 
                 entity.UpdateSprite();
