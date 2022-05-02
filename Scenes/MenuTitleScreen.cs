@@ -89,8 +89,8 @@ namespace Zelda
                         game.ChangeScene(new MenuGame(game));
                         break;
                     case "load":
-                        //LOAD THE GAME
                         Console.WriteLine("LOAD");
+                        game.LoadGame();
                         break;
                     default:
                         break;

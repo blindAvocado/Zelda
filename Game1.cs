@@ -2,8 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace Zelda
 {
@@ -51,6 +54,29 @@ namespace Zelda
         public void ChangeScene(MenuBase scene)
         {
             this.currentMenu = scene;
+        }
+
+        public void SaveGame()
+        {
+            BinaryFormatter binFormatter = new BinaryFormatter();
+
+            using (FileStream file = new FileStream("save.dat", FileMode.OpenOrCreate))
+            {
+                binFormatter.Serialize(file, (MenuGame)this.currentMenu);
+            }
+        }
+
+        public void LoadGame()
+        {
+            BinaryFormatter binFormatter = new BinaryFormatter();
+
+            using (FileStream file = new FileStream("save.dat", FileMode.OpenOrCreate))
+            {
+                if (file != null)
+                {
+                    this.currentMenu = (MenuGame)binFormatter.Deserialize(file);
+                }
+            }
         }
 
         protected override void Update(GameTime gameTime)
