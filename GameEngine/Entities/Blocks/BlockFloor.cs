@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Zelda
 {
-    public class BlockHole : Block
+    public class BlockFloor : EntityBlock
     {
-        public BlockHole(int roomX, int roomY) : base(roomX, roomY, 2, 0, false)
+        public BlockFloor(int roomX, int roomY) : base(roomX, roomY, 0, 0)
         {
 
         }

@@ -12,13 +12,17 @@ namespace Zelda
         private EntityPlayer player;
         private Sprite gui;
 
-        public MenuGame() : base()
+        public MenuGame(Game1 game) : base(game)
         {
             this.currentRoom = new Room();
             this.player = new EntityPlayer();
+            this.player.SetWeapon(Weapon.ForestBow);
             this.gui = new Sprite("gui", 0, 0);
 
             this.currentRoom.Spawn(player, 1, 1);
+            this.currentRoom.SpawnItem(new ItemKey(), 4, 5);
+            this.currentRoom.SpawnItem(new ItemBomb(), 8, 3);
+            this.currentRoom.SpawnItem(new ItemWeapon(Weapon.ForestSword), 3, 6);
         }
 
 
@@ -51,6 +55,10 @@ namespace Zelda
                     offsetY = -9;
             }
 
+            if (this.player.Weapon != Weapon.None)
+            {
+                this.player.Weapon.Draw(spriteBatch);
+            }
         }
     }
 }

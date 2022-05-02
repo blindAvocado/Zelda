@@ -23,7 +23,11 @@ namespace Zelda
                 "room_border",
                 "tiles",
                 "gui",
-                "heart"
+                "heart",
+                "items",
+                "projectiles",
+                "logo",
+                "select"
             };
 
             foreach (string img in imagesName)

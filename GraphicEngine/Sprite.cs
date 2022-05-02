@@ -15,6 +15,7 @@ namespace Zelda
         private float rotation;
         private Vector2 origin;
         private SpriteEffects effects;
+        private float layerDepth;
 
         private int spriteWidth;
         private int spriteHeight;
@@ -26,12 +27,26 @@ namespace Zelda
             this.color = color;
         }
 
+        public void SetRotation(float rotation)
+        {
+            this.rotation = rotation;
+        }
+
+        public void SetSpriteEffect(SpriteEffects effects)
+        {
+            this.effects = effects;
+        }
+
+        public void SetLayerDepth(float depth)
+        {
+            this.layerDepth = depth;
+        }
+
         public void SetCurrentFrame(int x, int y)
         {
             this.currentFrame.X = x;
             this.currentFrame.Y = y;
             this.UpdateCurrentFrame();
-
         }
 
         public Sprite(string imageKey, int x, int y, int columns = 1, int rows = 1, int frameX = 0, int frameY = 0)
@@ -57,10 +72,18 @@ namespace Zelda
             this.rotation = 0f;
             this.origin = Vector2.Zero;
             this.effects = SpriteEffects.None;
+            this.layerDepth = 0f;
         }
 
         public int Width { get { return this.spriteWidth; }  }
         public int Height{ get { return this.spriteHeight; }  }
+        public int CurrentFrameX { set { this.currentFrame.X = value; this.UpdateCurrentFrame(); } }
+        public int CurrentFrameY { set { this.currentFrame.Y = value; this.UpdateCurrentFrame(); } }
+
+        public Sprite Clone()
+        {
+            return (Sprite)this.MemberwiseClone();
+        }
 
         public void UpdateCurrentFrame()
         {
@@ -82,7 +105,7 @@ namespace Zelda
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.texture, this.destinationRectangle, this.sourceRectangle, this.color, this.rotation, this.origin, this.effects, 0f);
+            spriteBatch.Draw(this.texture, this.destinationRectangle, this.sourceRectangle, this.color, this.rotation, this.origin, this.effects, this.layerDepth);
         }
     }
 }

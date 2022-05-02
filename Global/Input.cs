@@ -30,5 +30,10 @@ namespace Zelda
         {
             return this.oldState.IsKeyUp(key) && this.currentState.IsKeyDown(key);
         }
+        
+        public bool IsKeyReleased(Keys key)
+        {
+            return this.oldState.IsKeyDown(key) && this.currentState.IsKeyUp(key);
+        }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Zelda
 {
@@ -23,7 +26,8 @@ namespace Zelda
         {
             base.Initialize();
 
-            this.currentMenu = new MenuGame();
+            //this.currentMenu = new MenuGame();
+            this.currentMenu = new MenuTitleScreen(this);
 
             graphics.PreferredBackBufferWidth = Settings.SCREEN_WIDTH * (int)Settings.PIXEL_RATIO;
             graphics.PreferredBackBufferHeight = Settings.SCREEN_HEIGHT * (int)Settings.PIXEL_RATIO;
@@ -44,6 +48,11 @@ namespace Zelda
 
         }
 
+        public void ChangeScene(MenuBase scene)
+        {
+            this.currentMenu = scene;
+        }
+
         protected override void Update(GameTime gameTime)
         {
             this.currentState = Keyboard.GetState();
@@ -62,7 +71,13 @@ namespace Zelda
         {
             GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(Settings.PIXEL_RATIO));
+            if (this.currentMenu is MenuTitleScreen)
+            {
+                GraphicsDevice.Clear(Color.LightGray);
+            }
+
+
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(Settings.PIXEL_RATIO));
 
             this.currentMenu.Draw(spriteBatch);
 
