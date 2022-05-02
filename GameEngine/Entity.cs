@@ -97,7 +97,7 @@ namespace Zelda
             int x = (int)intersectionDepth.X;
             int y = (int)intersectionDepth.Y;
 
-            Console.WriteLine(this);
+            Console.WriteLine(this + " " + intersectionDepth.X.ToString() + " " + intersectionDepth.Y.ToString());
 
             if (Math.Abs(x) > Math.Abs(y))
                 this.position.Y += y;
