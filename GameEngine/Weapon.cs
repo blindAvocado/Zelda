@@ -10,7 +10,7 @@ namespace Zelda
     {
         public static Weapon None = null;
         public static Weapon ForestSword = new Weapon(26, 1, 250, 0, 0, 7, 16, 5, 0);
-        public static Weapon ForestBow = new Weapon(21, 1, 100, 4, 5, 5, 16, 6, 0);
+        public static Weapon ForestBow = new Weapon(21, 1, 500, 4, 5, 5, 16, 6, 0);
 
         protected int iconIndex;
         protected Sprite sprite;

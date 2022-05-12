@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +26,10 @@ namespace Zelda
             this.border = new EntityBlock[14, 9];
             this.blocks = new EntityBlock[12, 7];
             this.entities = new List<Entity>();
+        }
+
+        public void Initialize()
+        {
 
             for (int y = 0; y < this.blocks.GetLength(1); y++)
             {
@@ -42,9 +47,51 @@ namespace Zelda
                         this.border[x, y] = new BlockWall(x - 1, y - 1);
                 }
             }
+        }
 
-            this.blocks[4, 4] = new BlockWall(4, 4);
+        public static Room LoadRoom(string name)
+        {
+            Room room = new Room();
 
+            using (BinaryReader reader = new BinaryReader(new FileStream(("rooms/" + name + ".room"), FileMode.Open, FileAccess.Read)))
+            {
+                for (int y = 0; y < room.blocks.GetLength(1); y++)
+                {
+                    for (int x = 0; x < room.blocks.GetLength(0); x++)
+                    {
+                        char c = reader.ReadChar();
+                        switch(c)
+                        {
+                            case '0':
+                                room.blocks[x, y] = new BlockFloor(x, y);
+                                break;
+                            case '1':
+                                room.blocks[x, y] = new BlockWall(x, y);
+                                break;
+                            case '2':
+                                room.blocks[x, y] = new BlockHole(x, y);
+                                break;
+                            case 'x':
+                                room.blocks[x, y] = new BlockFloor(x, y);
+                                room.Spawn(new EntityEnemy(new Sprite("enemy_octorok", 0, 0, 4, 2), 2, 1, Weapon.None, 1), x, y);
+                                break;
+                        }
+                    }
+                    reader.ReadChar();
+                }
+
+                for (int y = 0; y < room.border.GetLength(1); y++)
+                {
+                    for (int x = 0; x < room.border.GetLength(0); x++)
+                    {
+                        if (x == 0 || y == 0 || x == room.border.GetLength(0) - 1 || y == room.border.GetLength(1) - 1)
+                            room.border[x, y] = new BlockWall(x - 1, y - 1);
+                    }
+                }
+
+            }
+
+            return room;
         }
 
         public void Spawn(Entity entity, int roomX, int roomY)
@@ -87,8 +134,11 @@ namespace Zelda
 
             foreach (Entity entity in new List<Entity>(this.entities))
             {
-                if (!entity.HasMoved)
+                if (!entity.HasMoved && !entity.IsCreated)
                     continue;
+
+                if (entity.IsCreated)
+                    entity.IsCreated = false;
 
                 foreach (Entity other in new List<Entity>(this.entities))
                 {
@@ -100,7 +150,8 @@ namespace Zelda
                     if (info.isCollision)
                     {
                         if (entity.OnCollision(other))
-                            collisionEvent?.Invoke(info.offset);
+                            entity.CancelMove(info.offset);
+                            //collisionEvent?.Invoke(info.offset);
                         if (entity.IsDestroyed)
                             this.entities.Remove(entity);
                     }
@@ -116,7 +167,8 @@ namespace Zelda
                     if (info.isCollision)
                     {
                         if (entity.OnCollision(block))
-                            collisionEvent?.Invoke(info.offset);
+                            entity.CancelMove(info.offset);
+                            //collisionEvent?.Invoke(info.offset);
                         if (entity.IsDestroyed)
                             this.entities.Remove(entity);
                     }
@@ -132,7 +184,8 @@ namespace Zelda
                     if (info.isCollision)
                     {
                         if (entity.OnCollision(block))
-                            collisionEvent?.Invoke(info.offset);
+                            entity.CancelMove(info.offset);
+                            //collisionEvent?.Invoke(info.offset);
                         if (entity.IsDestroyed)
                             this.entities.Remove(entity);
                     }

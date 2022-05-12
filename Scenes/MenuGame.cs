@@ -12,14 +12,15 @@ namespace Zelda
         private EntityPlayer player;
         private Sprite gui;
 
-        public MenuGame(Game1 game) : base(game)
+        public MenuGame() : base()
         {
-            this.currentRoom = new Room();
-            this.player = new EntityPlayer();
+            this.currentRoom = Room.LoadRoom("room1");
+            this.player = new EntityPlayer(3);
             this.player.SetWeapon(Weapon.ForestBow);
             this.gui = new Sprite("gui", 0, 0);
 
             this.currentRoom.Spawn(player, 1, 1);
+            //this.currentRoom.Spawn(new EntityEnemy(new Sprite("enemy_octorok", 0, 0, 4, 2), 1, 1, Weapon.None, 1), 4, 3);
             this.currentRoom.SpawnItem(new ItemKey(), 4, 5);
             this.currentRoom.SpawnItem(new ItemBomb(), 8, 3);
             this.currentRoom.SpawnItem(new ItemWeapon(Weapon.ForestSword), 3, 6);

@@ -20,21 +20,24 @@ namespace Zelda
         protected int moveSpeed;
         protected Weapon weapon;
 
+        protected bool invincible;
         protected Direction direction;
 
         protected int animationFrame;
         protected int animationTimer;
+        protected int colorTimer;
+        protected const int HIT_TIMER = 500;
 
         public void SetWeapon(Weapon weapon)
         {
             this.weapon = weapon;
-            weapon.SetOwner(this);
+            if (this.weapon != null)
+                this.weapon.SetOwner(this);
         }
 
         protected LivingEntity(Sprite sprite, int maxLife = 1, int moveSpeed = 1, int x = 0, int y = 0) : base(sprite, x, y)
         {
             this.sprite.SetLayerDepth(0.3f);
-            this.currentRoom = null;
             this.currentLife = maxLife;
             this.maxLife = maxLife;
             this.moveSpeed = moveSpeed;
@@ -42,6 +45,8 @@ namespace Zelda
             this.direction = Direction.DOWN;
             this.animationFrame = 0;
             this.animationTimer = 0;
+            this.colorTimer = HIT_TIMER;
+            this.invincible = false;
         }
 
         public int CurrentLife { get { return this.currentLife; } }
@@ -50,11 +55,15 @@ namespace Zelda
 
         public void Damage(int damage)
         {
-            this.currentLife -= damage;
-
-            if (this.currentLife <= 0)
+            if (!this.invincible)
             {
-                this.Destroy();
+                this.currentLife -= damage;
+                this.sprite.SetColor(Color.Red);
+                this.colorTimer = HIT_TIMER;
+                this.invincible = true;
+
+                if (this.currentLife <= 0)
+                    this.Destroy();
             }
         }
 
@@ -103,6 +112,16 @@ namespace Zelda
 
         public void UpdateSpriteAnimation(GameTime gameTime)
         {
+            if (this.colorTimer >= 0)
+                this.colorTimer -= gameTime.ElapsedGameTime.Milliseconds;
+            else
+            {
+                this.sprite.SetColor(Color.White);
+                this.colorTimer = HIT_TIMER;
+                this.invincible = false;
+            }
+
+
             if (this.animationFrame == 2)
             {
                 this.animationTimer += gameTime.ElapsedGameTime.Milliseconds;
@@ -145,7 +164,8 @@ namespace Zelda
 
         public override void UpdateChildren(GameTime gameTime, Input input)
         {
-            this.weapon.Update(gameTime);
+            if (this.weapon != null)
+                this.weapon.Update(gameTime);
             this.UpdateSpriteAnimation(gameTime);
         }
     }

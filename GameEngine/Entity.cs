@@ -14,6 +14,7 @@ namespace Zelda
         private Rectangle hitbox;
         protected Sprite sprite;
         protected bool hasMoved;
+        protected bool isCreated;
 
         private bool isDestroyed;
 
@@ -53,10 +54,12 @@ namespace Zelda
                                         this.baseHitbox.Width,
                                         this.baseHitbox.Height);
             this.hasMoved = false;
+            this.isCreated = true;
             this.isDestroyed = false;
         }
 
         public bool HasMoved { get { return this.hasMoved; } }
+        public bool IsCreated { get { return this.isCreated; } set { this.isCreated = value; } }
         public bool IsDestroyed { get { return this.isDestroyed;  } }
         public int RoomX
         {
@@ -97,7 +100,7 @@ namespace Zelda
             int x = (int)intersectionDepth.X;
             int y = (int)intersectionDepth.Y;
 
-            Console.WriteLine(this + " " + intersectionDepth.X.ToString() + " " + intersectionDepth.Y.ToString());
+            //Console.WriteLine(this + " " + intersectionDepth.X.ToString() + " " + intersectionDepth.Y.ToString());
 
             if (Math.Abs(x) > Math.Abs(y))
                 this.position.Y += y;

@@ -12,15 +12,14 @@ namespace Zelda
         private int bombs;
         private int coins;
 
-
-
-        public EntityPlayer(int x = 0, int y = 0) : base(new Sprite("link", x, y, 4, 3), 1, 1, x, y)
+        public EntityPlayer(int life, int x = 0, int y = 0) : base(new Sprite("link", x, y, 4, 3), life, 1, x, y)
         {
             this.keys = 0;
             this.bombs = 0;
             this.coins = 0;
 
-            Room.collisionEvent += CancelMove;
+            //Room.collisionEvent += CancelMove;
+
         }
 
         public int KeysCount { get { return this.keys; } }
@@ -37,6 +36,9 @@ namespace Zelda
 
             if (other is BlockWall || other is BlockHole)
                 return true;
+
+            if (other is EntityEnemy)
+                this.Damage(((EntityEnemy)other).SelfDamage);
 
             return false;
         }

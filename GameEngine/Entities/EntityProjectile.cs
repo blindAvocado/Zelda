@@ -57,10 +57,15 @@ namespace Zelda
             {
                 LivingEntity entity = (LivingEntity)other;
                 entity.Damage(this.damage);
-                this.Destroy();
+
+                if (!this.speed.Equals(Point.Zero))
+                    this.Destroy();
             }
             if (other is BlockWall)
-                this.Destroy();
+            {
+                if (!this.speed.Equals(Point.Zero))
+                    this.Destroy();
+            }
 
             return false;
         }

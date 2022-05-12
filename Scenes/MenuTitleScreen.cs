@@ -12,19 +12,19 @@ namespace Zelda
         private List<string> options;
         private int currentOption;
         private int currentOptionY;
-        private Sprite logo;
         private Sprite selectIcon;
         private Game1 game;
 
         private int animationFrame;
         private int animationTimer;
 
-        public MenuTitleScreen(Game1 game) : base(game)
+        public static event Action<MenuGame> startGameEvent;
+
+        public MenuTitleScreen(Game1 game) : base()
         {
             this.options = new List<string>();
             this.currentOption = 0;
             this.currentOptionY = 150;
-            this.logo = new Sprite("logo", 32, 16);
             this.selectIcon = new Sprite("select", 75, this.currentOptionY, 2, 1, 0);
             this.game = game;
             
@@ -86,11 +86,12 @@ namespace Zelda
                 {
                     case "start":
                         Console.WriteLine("START");
-                        game.ChangeScene(new MenuGame(game));
+                        //game.ChangeScene(new MenuGame());
+                        startGameEvent?.Invoke(new MenuGame());
                         break;
                     case "load":
                         Console.WriteLine("LOAD");
-                        game.LoadGame();
+                        game.ChangeScene(Game1.LoadGame());
                         break;
                     default:
                         break;
@@ -101,8 +102,9 @@ namespace Zelda
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            this.logo.Draw(spriteBatch);
             this.selectIcon.Draw(spriteBatch);
+
+            spriteBatch.Draw(Resources.Images["logo"], new Vector2(32, 16), Color.White);
 
             spriteBatch.DrawString(Resources.Fonts["Font"], "Start Game", new Vector2(96, 154), Color.Black);
             spriteBatch.DrawString(Resources.Fonts["Font"], "Load Game", new Vector2(96, 169), Color.Black);

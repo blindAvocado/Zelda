@@ -9,7 +9,7 @@ namespace Zelda
     public abstract class MenuBase
     {
 
-        protected MenuBase(Game1 game)
+        protected MenuBase()
         {
 
         }
