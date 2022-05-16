@@ -64,7 +64,7 @@ namespace Zelda
 
             using (FileStream file = new FileStream("save.dat", FileMode.OpenOrCreate))
             {
-                //binFormatter.Serialize(file, (MenuGame)this.currentGameMenu);
+                binFormatter.Serialize(file, (MenuGame)this.currentMenu);
             }
         }
 
@@ -79,6 +79,7 @@ namespace Zelda
                     MenuGame loadedScene = (MenuGame)binFormatter.Deserialize(file);
 
                     //this.currentMenu = loadedScene;
+                    loadedScene.Initialize();
 
                     return loadedScene;
                 }

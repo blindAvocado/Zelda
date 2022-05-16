@@ -6,14 +6,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Zelda
 {
+    [Serializable]
     public abstract class Entity
     {
-        protected Room currentRoom;
-        private Rectangle position;
-        private Rectangle baseHitbox;
-        private Rectangle hitbox;
-        protected Sprite sprite;
-        protected bool hasMoved;
+        [NonSerialized] protected Room currentRoom;
+        [NonSerialized] private Rectangle position;
+        [NonSerialized] private Rectangle baseHitbox;
+        [NonSerialized] private Rectangle hitbox;
+        [NonSerialized] protected Sprite sprite;
+        [NonSerialized] protected bool hasMoved;
         protected bool isCreated;
 
         private bool isDestroyed;
@@ -56,6 +57,12 @@ namespace Zelda
             this.hasMoved = false;
             this.isCreated = true;
             this.isDestroyed = false;
+        }
+
+
+        public void InitializeLoad()
+        {
+            this.Initialize(sprite, 0, 0, new Rectangle(0, 0, sprite.Width, sprite.Height));
         }
 
         public bool HasMoved { get { return this.hasMoved; } }

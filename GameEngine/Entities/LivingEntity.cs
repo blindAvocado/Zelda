@@ -13,6 +13,7 @@ namespace Zelda
         DOWN
     }
 
+    [Serializable]
     public abstract class LivingEntity : Entity
     {
         protected int currentLife;
@@ -20,13 +21,13 @@ namespace Zelda
         protected int moveSpeed;
         protected Weapon weapon;
 
-        protected bool invincible;
-        protected Direction direction;
+        [NonSerialized] protected bool invincible;
+        [NonSerialized] protected Direction direction;
 
-        protected int animationFrame;
-        protected int animationTimer;
-        protected int colorTimer;
-        protected const int HIT_TIMER = 500;
+        [NonSerialized] protected int animationFrame;
+        [NonSerialized] protected int animationTimer;
+        [NonSerialized] protected int colorTimer;
+        [NonSerialized] protected const int HIT_TIMER = 1000;
 
         public void SetWeapon(Weapon weapon)
         {
@@ -52,6 +53,20 @@ namespace Zelda
         public int CurrentLife { get { return this.currentLife; } }
         public int MaxLife { get { return this.maxLife; } }
         public Weapon Weapon { get { return this.weapon; } }
+
+        public virtual void Initialize()
+        {
+            this.sprite.SetLayerDepth(0.3f);
+            //this.weapon = Weapon.None;
+            this.weapon.Initialize();
+            this.direction = Direction.DOWN;
+            this.animationFrame = 0;
+            this.animationTimer = 0;
+            this.colorTimer = HIT_TIMER;
+            this.invincible = false;
+
+            this.InitializeLoad();
+        }
 
         public void Damage(int damage)
         {

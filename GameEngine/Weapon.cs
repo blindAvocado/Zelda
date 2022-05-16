@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Zelda
 {
+    [Serializable]
     public class Weapon
     {
         public static Weapon None = null;
@@ -13,14 +14,20 @@ namespace Zelda
         public static Weapon ForestBow = new Weapon(21, 1, 500, 4, 5, 5, 16, 6, 0);
 
         protected int iconIndex;
-        protected Sprite sprite;
-        protected int damage;
-        protected int attackSpeed;
-        protected Projectile projectile;
-        protected Point projectileOffset;
+        [NonSerialized] protected Sprite sprite;
+        [NonSerialized] protected int damage;
+        [NonSerialized] protected int attackSpeed;
+        private int projectileIndex;
+        private int projectileSpeed;
+        private int projectileWidth;
+        private int projectileHeight;
+        private int offsetX;
+        private int offsetY;
+        [NonSerialized] protected Projectile projectile;
+        [NonSerialized] protected Point projectileOffset;
 
-        protected bool isWeaponReady;
-        protected int weaponCooldown;
+        [NonSerialized] protected bool isWeaponReady;
+        [NonSerialized] protected int weaponCooldown;
 
         public void SetOwner(Entity owner)
         {
@@ -34,6 +41,12 @@ namespace Zelda
             this.sprite = new Sprite("items", 124, 26, 8, 5, iconIndex % 8, iconIndex / 8);
             this.damage = damage;
             this.attackSpeed = attackSpeed;
+            this.projectileIndex = projectileIndex;
+            this.projectileSpeed = projectileSpeed;
+            this.projectileWidth = projectileWidth;
+            this.projectileHeight = projectileHeight;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
             this.projectile = new Projectile(projectileIndex, damage, this.attackSpeed, projectileSpeed, projectileWidth, projectileHeight, offsetX, offsetY);
             this.projectileOffset = new Point(projectileOffsetX, projectileOffsetY);
 
@@ -47,6 +60,13 @@ namespace Zelda
         public bool CanUseWeapon()
         {
             return this.isWeaponReady;
+        }
+
+        public void Initialize()
+        {
+            this.sprite = new Sprite("items", 124, 26, 8, 5, iconIndex % 8, iconIndex / 8);
+            this.projectile = new Projectile(this.projectileIndex, this.damage, this.attackSpeed, this.projectileSpeed, this.projectileWidth, this.projectileHeight, this.offsetX, this.offsetY);
+            this.projectileOffset = new Point(-4, 2);
         }
 
         public void UseWeapon(Room room, Rectangle ownerHitbox, Direction direction)

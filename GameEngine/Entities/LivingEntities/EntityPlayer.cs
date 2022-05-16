@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Zelda
 {
+    [Serializable]
     public class EntityPlayer : LivingEntity
     {
         private int keys;
@@ -25,6 +26,13 @@ namespace Zelda
         public int KeysCount { get { return this.keys; } }
         public int BombsCount { get { return this.bombs; } }
         public int CoinsCount { get { return this.coins; } }
+
+        public override void Initialize()
+        {
+            this.sprite = new Sprite("link", 0, 0, 4, 3);
+            base.Initialize();
+
+        }
 
         public override bool OnCollision(Entity other)
         {

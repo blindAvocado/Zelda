@@ -6,16 +6,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Zelda
 {
+    [Serializable]
     public class MenuGame : MenuBase
     {
-        private Room currentRoom;
+        private string currentRoomName;
+        [NonSerialized] private Room currentRoom;
         private EntityPlayer player;
-        private Sprite gui;
+        [NonSerialized] private Sprite gui;
 
         public MenuGame() : base()
         {
-            this.currentRoom = Room.LoadRoom("room1");
-            this.player = new EntityPlayer(3);
+            this.currentRoomName = "room1";
+            this.currentRoom = Room.LoadRoom(currentRoomName);
+            this.player = new EntityPlayer(10);
             this.player.SetWeapon(Weapon.ForestBow);
             this.gui = new Sprite("gui", 0, 0);
 
@@ -30,6 +33,18 @@ namespace Zelda
         public override void Update(GameTime gameTime, Input input)
         {
             this.currentRoom.Update(gameTime, input);
+        }
+
+        public void Initialize()
+        {
+            this.currentRoom = Room.LoadRoom(currentRoomName);
+            this.gui = new Sprite("gui", 0, 0);
+            this.currentRoom.SpawnItem(new ItemKey(), 4, 5);
+            this.currentRoom.SpawnItem(new ItemBomb(), 8, 3);
+            this.currentRoom.SpawnItem(new ItemWeapon(Weapon.ForestSword), 3, 6);
+            Console.WriteLine(this.player.Weapon);
+            this.player.Initialize();
+            this.currentRoom.Spawn(player, 1, 1);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

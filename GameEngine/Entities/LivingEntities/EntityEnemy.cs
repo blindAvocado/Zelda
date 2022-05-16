@@ -60,7 +60,7 @@ namespace Zelda
 
             }
 
-            if (this.moveTimer <= 1500)
+            if (this.moveTimer <= 800)
             {
                 if (axis == 0)
                     this.Move(this.moveSpeed * this.moveDirection, 0);

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Zelda
 {
+    [Serializable]
     public abstract class MenuBase
     {
 
