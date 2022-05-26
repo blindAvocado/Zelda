@@ -29,6 +29,7 @@ namespace Zelda
                 "logo",
                 "select",
                 "enemy_octorok",
+                "enemy_moblin",
                 "doors"
             };
 

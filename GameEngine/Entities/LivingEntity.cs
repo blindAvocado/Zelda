@@ -68,7 +68,7 @@ namespace Zelda
             this.InitializeLoad();
         }
 
-        public virtual void Damage(int damage)
+        public void Damage(int damage)
         {
             if (!this.invincible)
             {

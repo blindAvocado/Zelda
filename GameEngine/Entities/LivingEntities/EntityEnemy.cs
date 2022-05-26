@@ -21,7 +21,8 @@ namespace Zelda
 
             this.axis = 0;
             this.direction = 0;
-            this.moveTimer = 3000;
+            //this.moveTimer = 2000;
+            this.moveTimer = GetRandomTimer();
 
 
             //Room.collisionEvent += CancelMove;
@@ -50,11 +51,18 @@ namespace Zelda
             return false;
         }
 
+        public int GetRandomTimer()
+        {
+            Random rand = new Random();
+
+            return (rand.Next(10, 30) * 100);
+        }
+
         public override void UpdateChildren(GameTime gameTime, Input input)
         {
             this.moveTimer += gameTime.ElapsedGameTime.Milliseconds;
 
-            if (this.moveTimer >= 3000)
+            if (this.moveTimer >= GetRandomTimer())
             {
                 this.moveTimer = 0;
                 this.axis = random.Next(2);
@@ -65,7 +73,7 @@ namespace Zelda
 
             }
 
-            if (this.moveTimer <= 800)
+            if (this.moveTimer <= (GetRandomTimer() / 2))
             {
                 if (axis == 0)
                     this.Move(this.moveSpeed * this.moveDirection, 0);

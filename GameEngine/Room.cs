@@ -84,6 +84,10 @@ namespace Zelda
                                 room.blocks[x, y] = new BlockFloor(x, y);
                                 room.Spawn(new EnemyOctorok(), x, y);
                                 break;
+                            case 'y':
+                                room.blocks[x, y] = new BlockFloor(x, y);
+                                room.Spawn(new EnemyMoblin(), x, y);
+                                break;
                         }
                     }
                     reader.ReadChar();
