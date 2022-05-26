@@ -29,6 +29,7 @@ namespace Zelda
             this.position.X = x;
             this.position.Y = y;
             this.UpdateHitbox();
+            this.UpdateSprite();
         }
 
         protected Entity(Sprite sprite, int x, int y)

@@ -35,12 +35,17 @@ namespace Zelda
             {
                 return true;
             }
+            if (other is EntityBlookDoor)
+            {
+                return true;
+            }
 
             if (other is EntityPlayer)
             {
                 EntityPlayer player = (EntityPlayer)other;
                 player.Damage(this.selfDamage);
             }
+
 
             return false;
         }

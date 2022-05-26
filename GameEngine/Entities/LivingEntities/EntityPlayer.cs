@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -47,6 +48,24 @@ namespace Zelda
 
             if (other is EntityEnemy)
                 this.Damage(((EntityEnemy)other).SelfDamage);
+
+            if (other is EntityBlookDoor)
+            {
+                EntityBlookDoor door = (EntityBlookDoor)other;
+                switch (door.DoorType)
+                {
+                    case DoorType.OPEN:
+                        door.Transport(this);
+                        Debug.WriteLine("TRANSPORT");
+                        return true;
+                    case DoorType.LOCKED:
+                        break;
+                    case DoorType.CLOSED:
+                        return true;
+                    default:
+                        return true;
+                }
+            }
 
             return false;
         }

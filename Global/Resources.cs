@@ -28,7 +28,8 @@ namespace Zelda
                 "projectiles",
                 "logo",
                 "select",
-                "enemy_octorok"
+                "enemy_octorok",
+                "doors"
             };
 
             foreach (string img in imagesName)
