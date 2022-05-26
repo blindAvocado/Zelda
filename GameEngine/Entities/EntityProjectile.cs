@@ -61,11 +61,11 @@ namespace Zelda
                 if (!this.speed.Equals(Point.Zero))
                     this.Destroy();
             }
-            if (other is BlockWall)
-            {
-                if (!this.speed.Equals(Point.Zero))
-                    this.Destroy();
-            }
+            //if (other is BlockWall)
+            //{
+            //    if (!this.speed.Equals(Point.Zero))
+            //        this.Destroy();
+            //}
 
             return false;
         }
@@ -80,6 +80,11 @@ namespace Zelda
 
                 if (this.lifeTime >= this.attackSpeed / 2)
                     this.Destroy();
+
+                if (this.Hitbox.X == Settings.SCREEN_WIDTH || this.Hitbox.X == 0 || this.Hitbox.Y == Settings.SCREEN_HEIGHT || this.Hitbox.Y == 0)
+                {
+                    this.Destroy();
+                }
             }
         }
     }

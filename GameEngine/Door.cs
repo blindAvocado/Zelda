@@ -90,7 +90,7 @@ namespace Zelda
                     hitbox.Height = 20;
                     break;
                 case Direction.LEFT:
-                    hitbox.X = 12;
+                    hitbox.X = 10;
                     hitbox.Width = 20;
                     hitbox.Height = 32;
                     break;

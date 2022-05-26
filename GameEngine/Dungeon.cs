@@ -164,7 +164,7 @@ namespace Zelda
                     break;
                 case Direction.DOWN:
                     x = Room.ROOM_OFFSET_X + 88;
-                    y = Room.ROOM_OFFSET_Y - 20 + EntityBlock.HEIGHT + 4;
+                    y = Room.ROOM_OFFSET_Y - 16 + EntityBlock.HEIGHT;
                     this.currentRoom.SpawnProjectile(player, x, y);
                     break;
             }
