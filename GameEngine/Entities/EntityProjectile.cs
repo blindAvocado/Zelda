@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,7 +20,7 @@ namespace Zelda
         {
             this.owner = owner;
             this.speed = new Point(0, 0);
-            this.sprite.SetLayerDepth(0.2f);
+            this.sprite.SetLayerDepth(0.3f);
 
             switch (direction)
             {
@@ -73,19 +74,24 @@ namespace Zelda
         public override void UpdateChildren(GameTime gameTime, Input input)
         {
             if (!this.speed.Equals(Point.Zero))
+            {
                 this.Move(this.speed);
+
+                if (this.Hitbox.X >= Settings.SCREEN_WIDTH || this.Hitbox.X <= 0 || this.Hitbox.Y >= Settings.SCREEN_HEIGHT || this.Hitbox.Y <= 52)
+                {
+                    this.Destroy();
+                }
+            }
             else
             {
                 this.lifeTime += gameTime.ElapsedGameTime.Milliseconds;
 
                 if (this.lifeTime >= this.attackSpeed / 2)
                     this.Destroy();
-
-                if (this.Hitbox.X == Settings.SCREEN_WIDTH || this.Hitbox.X == 0 || this.Hitbox.Y == Settings.SCREEN_HEIGHT || this.Hitbox.Y == 0)
-                {
-                    this.Destroy();
-                }
             }
+
+            
+            Debug.WriteLine(this.Hitbox);
         }
     }
 }
