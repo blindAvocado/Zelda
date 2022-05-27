@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Zelda
 {
+    [Serializable]
     public class ItemKey : Item
     {
         public ItemKey(): base(19, ItemType.KEY, new Rectangle(5, 1, 6, 14))

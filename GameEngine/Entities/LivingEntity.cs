@@ -21,8 +21,8 @@ namespace Zelda
         protected int moveSpeed;
         protected Weapon weapon;
 
-        [NonSerialized] protected bool invincible;
-        [NonSerialized] protected Direction direction;
+        protected bool invincible;
+        protected Direction direction;
 
         [NonSerialized] protected int animationFrame;
         [NonSerialized] protected int animationTimer;
@@ -54,21 +54,39 @@ namespace Zelda
         public int MaxLife { get { return this.maxLife; } }
         public Weapon Weapon { get { return this.weapon; } }
 
-        public virtual void Initialize()
+        public override void InitializeLoad()
         {
-            this.sprite.SetLayerDepth(0.3f);
-            //this.weapon = Weapon.None;
-            this.weapon.Initialize();
-            this.direction = Direction.DOWN;
+            this.weapon?.Initialize();
             this.animationFrame = 0;
             this.animationTimer = 0;
             this.colorTimer = HIT_TIMER;
-            this.invincible = false;
 
-            this.InitializeLoad();
+            this.sprite = new Sprite(this.spriteName, 0, 0, this.spriteCol, this.spriteRow);
+            this.sprite.SetLayerDepth(0.3f);
+
+            
+            base.InitializeLoad();
         }
 
-        public void Damage(int damage)
+        public override void Save()
+        {
+            this.positionInt[0] = this.position.X;
+            this.positionInt[1] = this.position.Y;
+            this.positionInt[2] = this.position.Width;
+            this.positionInt[3] = this.position.Height;
+
+            this.baseHitboxInt[0] = this.baseHitbox.X;
+            this.baseHitboxInt[1] = this.baseHitbox.Y;
+            this.baseHitboxInt[2] = this.baseHitbox.Width;
+            this.baseHitboxInt[3] = this.baseHitbox.Height;
+
+            this.hitboxInt[0] = this.hitbox.X;
+            this.hitboxInt[1] = this.hitbox.Y;
+            this.hitboxInt[2] = this.hitbox.Width;
+            this.hitboxInt[3] = this.hitbox.Height;
+        }
+
+        public virtual void Damage(int damage)
         {
             if (!this.invincible)
             {
@@ -91,19 +109,6 @@ namespace Zelda
             else
             {
                 this.currentLife = this.maxLife;
-            }
-        }
-
-        public void UseWeapon()
-        {
-            if (this.weapon != Weapon.None && this.currentRoom != null)
-            {
-                if (this.weapon.CanUseWeapon())
-                {
-                    this.weapon.UseWeapon(this.currentRoom, this.Hitbox, this.direction);
-                    this.animationFrame = 2;
-                    this.animationTimer = 0;
-                }
             }
         }
 

@@ -7,34 +7,32 @@ using System.Text;
 
 namespace Zelda
 {
-    public class MenuTitleScreen : MenuBase
+    class MenuDeath : MenuBase
     {
         private List<string> options;
         private int currentOption;
         private int currentOptionY;
         private Sprite selectIcon;
-        private Game1 game;
 
         private int animationFrame;
         private int animationTimer;
 
-        public event Action startGameEvent;
-        public event Action loadGameEvent;
+        public static event Action restartGameEvent;
+        public static event Action mainMenuEvent;
 
-        public MenuTitleScreen(Game1 game) : base()
+        public MenuDeath() : base()
         {
             this.options = new List<string>();
             this.currentOption = 0;
-            this.currentOptionY = 150;
+            this.currentOptionY = 113;
             this.selectIcon = new Sprite("select", 75, this.currentOptionY, 2, 1, 0);
-            this.game = game;
-            
+
             this.animationFrame = 0;
             this.animationTimer = 0;
 
-            this.options.Add("start");
-            this.options.Add("load");
-            this.options.Add("help");
+            this.options.Add("restart");
+            this.options.Add("menu");
+
         }
 
         public override void Save()
@@ -90,19 +88,16 @@ namespace Zelda
             {
                 switch (options[currentOption])
                 {
-                    case "start":
-                        startGameEvent?.Invoke();
+                    case "restart":
+                        restartGameEvent?.Invoke();
                         break;
-                    case "load":
-                        loadGameEvent?.Invoke();
-                        break;
-                    case "help":
-                        game.ChangeScene(new MenuHelp(game));
+                    case "menu":
+                        mainMenuEvent?.Invoke();
                         break;
                     default:
                         break;
                 }
-                
+
             }
         }
 
@@ -110,11 +105,9 @@ namespace Zelda
         {
             this.selectIcon.Draw(spriteBatch);
 
-            spriteBatch.Draw(Resources.Images["logo"], new Vector2(32, 16), Color.White);
-
-            spriteBatch.DrawString(Resources.Fonts["Bold"], "Начать игру", new Vector2(96, 154), Color.Black);
-            spriteBatch.DrawString(Resources.Fonts["Bold"], "Загрузить игру", new Vector2(96, 169), Color.Black);
-            spriteBatch.DrawString(Resources.Fonts["Bold"], "Помощь", new Vector2(96, 184), Color.Black);
+            spriteBatch.DrawString(Resources.Fonts["Bold"], "Вы погибли", new Vector2(Settings.SCREEN_WIDTH / 2 - 40, Settings.SCREEN_HEIGHT / 2 - 20), Color.GhostWhite);
+            spriteBatch.DrawString(Resources.Fonts["Normal"], "Начать заново", new Vector2(100, 115), Color.GhostWhite);
+            spriteBatch.DrawString(Resources.Fonts["Normal"], "Выйти в меню", new Vector2(100, 130), Color.GhostWhite);
         }
     }
 }

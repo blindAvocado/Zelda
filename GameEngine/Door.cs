@@ -22,7 +22,7 @@ namespace Zelda
         private Dungeon dungeon;
         private Rectangle hitbox;
 
-        public Door(Dungeon dungeon, Direction direction, DoorType type, Room room)
+        public Door(Dungeon dungeon, Direction direction, DoorType type, Room room = (Room)default)
         {
             this.dungeon = dungeon;
             this.direction = direction;
@@ -105,9 +105,9 @@ namespace Zelda
             return hitbox;
         }
 
-        public EntityBlookDoor createDoor()
+        public EntityDoor createDoor()
         {
-            return new EntityBlookDoor(this.dungeon, this.direction, this.type, this.room, this.sprite, this.hitbox);
+            return new EntityDoor(this.dungeon, this.direction, this.type, this.room, this.sprite, this.hitbox);
         }
     }
 }

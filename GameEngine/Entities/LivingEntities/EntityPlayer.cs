@@ -13,27 +13,26 @@ namespace Zelda
         private int keys;
         private int bombs;
         private int coins;
+        private Room currentRoom;
+
+        public static event Action<MenuBase> playerDeath;
+
+        public Room CurrentRoom { set { this.currentRoom = value; } }
 
         public EntityPlayer(int life, int x = 0, int y = 0) : base(new Sprite("link", x, y, 4, 3), life, 1, x, y)
         {
             this.keys = 0;
             this.bombs = 0;
             this.coins = 0;
-
-            //Room.collisionEvent += CancelMove;
+            this.spriteName = "link";
+            this.spriteCol = 4;
+            this.spriteRow = 3;
 
         }
 
         public int KeysCount { get { return this.keys; } }
         public int BombsCount { get { return this.bombs; } }
         public int CoinsCount { get { return this.coins; } }
-
-        public override void Initialize()
-        {
-            this.sprite = new Sprite("link", 0, 0, 4, 3);
-            base.Initialize();
-
-        }
 
         public override bool OnCollision(Entity other)
         {
@@ -49,14 +48,13 @@ namespace Zelda
             if (other is EntityEnemy)
                 this.Damage(((EntityEnemy)other).SelfDamage);
 
-            if (other is EntityBlookDoor)
+            if (other is EntityDoor)
             {
-                EntityBlookDoor door = (EntityBlookDoor)other;
+                EntityDoor door = (EntityDoor)other;
                 switch (door.DoorType)
                 {
                     case DoorType.OPEN:
                         door.Transport(this);
-                        Debug.WriteLine("TRANSPORT");
                         return true;
                     case DoorType.LOCKED:
                         break;
@@ -67,7 +65,27 @@ namespace Zelda
                 }
             }
 
+            //Debug.WriteLine(other);
+
             return false;
+        }
+
+        public override void Damage(int damage)
+        {
+            if (!this.invincible)
+            {
+                this.currentLife -= damage;
+                this.sprite.SetColor(Color.Red);
+                this.colorTimer = HIT_TIMER;
+                this.invincible = true;
+
+                if (this.currentLife <= 0)
+                {
+                    playerDeath?.Invoke(new MenuDeath());
+                    this.Destroy();
+
+                }
+            }
         }
 
         public void AddKey(int amount)
@@ -77,6 +95,19 @@ namespace Zelda
         public void AddBomb(int amount)
         {
             this.bombs += amount;
+        }
+
+        public void UseWeapon()
+        {
+            if (this.weapon != Weapon.None && this.currentRoom != null)
+            {
+                if (this.weapon.CanUseWeapon())
+                {
+                    this.weapon.UseWeapon(this.currentRoom, this.Hitbox, this.direction);
+                    this.animationFrame = 2;
+                    this.animationTimer = 0;
+                }
+            }
         }
 
         public override void UpdateChildren(GameTime gameTime, Input input)

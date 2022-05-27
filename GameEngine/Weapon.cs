@@ -15,12 +15,14 @@ namespace Zelda
 
         protected int iconIndex;
         [NonSerialized] protected Sprite sprite;
-        [NonSerialized] protected int damage;
-        [NonSerialized] protected int attackSpeed;
+        protected int damage;
+        protected int attackSpeed;
         private int projectileIndex;
         private int projectileSpeed;
         private int projectileWidth;
         private int projectileHeight;
+        private int projectileOffsetX;
+        private int projectileOffsetY;
         private int offsetX;
         private int offsetY;
         [NonSerialized] protected Projectile projectile;
@@ -45,6 +47,8 @@ namespace Zelda
             this.projectileSpeed = projectileSpeed;
             this.projectileWidth = projectileWidth;
             this.projectileHeight = projectileHeight;
+            this.projectileOffsetX = projectileOffsetX;
+            this.projectileOffsetY = projectileOffsetY;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.projectile = new Projectile(projectileIndex, damage, this.attackSpeed, projectileSpeed, projectileWidth, projectileHeight, offsetX, offsetY);
@@ -66,7 +70,7 @@ namespace Zelda
         {
             this.sprite = new Sprite("items", 124, 26, 8, 5, iconIndex % 8, iconIndex / 8);
             this.projectile = new Projectile(this.projectileIndex, this.damage, this.attackSpeed, this.projectileSpeed, this.projectileWidth, this.projectileHeight, this.offsetX, this.offsetY);
-            this.projectileOffset = new Point(-4, 2);
+            this.projectileOffset = new Point(this.projectileOffsetX, this.projectileOffsetY);
         }
 
         public void UseWeapon(Room room, Rectangle ownerHitbox, Direction direction)

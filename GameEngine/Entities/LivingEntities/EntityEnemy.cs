@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Zelda
 {
+    [Serializable]
     public class EntityEnemy : LivingEntity
     {
         private static Random random = new Random();
@@ -21,11 +22,7 @@ namespace Zelda
 
             this.axis = 0;
             this.direction = 0;
-            //this.moveTimer = 2000;
             this.moveTimer = GetRandomTimer();
-
-
-            //Room.collisionEvent += CancelMove;
         }
 
         public int SelfDamage { get { return this.selfDamage; } }
@@ -36,7 +33,7 @@ namespace Zelda
             {
                 return true;
             }
-            if (other is EntityBlookDoor)
+            if (other is EntityDoor)
             {
                 return true;
             }
@@ -49,6 +46,12 @@ namespace Zelda
 
 
             return false;
+        }
+
+        public override void InitializeLoad()
+        {
+            //this.SetWeapon(Weapon.None);
+            base.InitializeLoad();
         }
 
         public int GetRandomTimer()

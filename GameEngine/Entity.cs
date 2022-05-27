@@ -9,25 +9,31 @@ namespace Zelda
     [Serializable]
     public abstract class Entity
     {
-        [NonSerialized] protected Room currentRoom;
-        [NonSerialized] private Rectangle position;
-        [NonSerialized] private Rectangle baseHitbox;
-        [NonSerialized] private Rectangle hitbox;
+        [NonSerialized] protected Rectangle position;
+        [NonSerialized] protected Rectangle baseHitbox;
+        [NonSerialized] protected Rectangle hitbox;
         [NonSerialized] protected Sprite sprite;
         [NonSerialized] protected bool hasMoved;
+        protected string spriteName;
+        protected int spriteRow;
+        protected int spriteCol;
+        protected int[] positionInt = new int[4];
+        protected int[] baseHitboxInt = new int[4];
+        protected int[] hitboxInt = new int[4];
         protected bool isCreated;
+        protected int roomX;
+        protected int roomY;
 
         private bool isDestroyed;
-
-        public void SetRoom(Room room)
-        {
-            this.currentRoom = room;
-        }
 
         public void SetPosition(int x, int y)
         {
             this.position.X = x;
             this.position.Y = y;
+
+            //positionInt[0] = this.position.X;
+            //positionInt[1] = this.position.Y;
+
             this.UpdateHitbox();
             this.UpdateSprite();
         }
@@ -45,12 +51,11 @@ namespace Zelda
 
         private void Initialize(Sprite sprite, int x, int y, Rectangle baseHitbox)
         {
-            this.currentRoom = null;
             this.sprite = sprite;
             this.position = new Rectangle(x, y, this.sprite.Width, this.sprite.Height);
 
-
             this.baseHitbox = baseHitbox;
+
             this.hitbox = new Rectangle(this.position.X + this.baseHitbox.X,
                                         this.position.Y + this.baseHitbox.Y,
                                         this.baseHitbox.Width,
@@ -61,9 +66,19 @@ namespace Zelda
         }
 
 
-        public void InitializeLoad()
+        public virtual void InitializeLoad()
         {
-            this.Initialize(sprite, 0, 0, new Rectangle(0, 0, sprite.Width, sprite.Height));
+            this.baseHitbox = new Rectangle(this.baseHitboxInt[0], this.baseHitboxInt[1], this.baseHitboxInt[2], this.baseHitboxInt[3]);
+            this.position = new Rectangle(this.positionInt[0], this.positionInt[1], this.positionInt[2], this.positionInt[3]);
+            this.hitbox = new Rectangle(this.hitboxInt[0], this.hitboxInt[1], this.hitboxInt[2], this.hitboxInt[3]);
+
+            this.UpdateHitbox();
+            this.UpdateSprite();
+        }
+
+        public virtual void Save()
+        {
+
         }
 
         public bool HasMoved { get { return this.hasMoved; } }
@@ -90,6 +105,7 @@ namespace Zelda
         {
             this.position.X += offsetX;
             this.position.Y += offsetY;
+
             this.hasMoved = true;
             this.UpdateHitbox();
         }
@@ -107,8 +123,6 @@ namespace Zelda
         {
             int x = (int)intersectionDepth.X;
             int y = (int)intersectionDepth.Y;
-
-            //Console.WriteLine(this + " " + intersectionDepth.X.ToString() + " " + intersectionDepth.Y.ToString());
 
             if (Math.Abs(x) > Math.Abs(y))
                 this.position.Y += y;

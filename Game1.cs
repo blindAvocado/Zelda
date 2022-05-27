@@ -15,8 +15,13 @@ namespace Zelda
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private MenuBase currentMenu;
+        private MenuTitleScreen mainMenu;
         private KeyboardState oldState;
         private KeyboardState currentState;
+
+        public static bool paused = false;
+
+        public MenuBase GetMainMenu { get { return this.mainMenu; } }
 
         public Game1()
         {
@@ -24,15 +29,22 @@ namespace Zelda
             IsMouseVisible = Settings.IS_MOUSE_VISIBLE;
             Content.RootDirectory = "Content";
 
-            MenuTitleScreen.startGameEvent += ChangeScene;
         }
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            //this.currentMenu = new MenuGame();
-            this.currentMenu = new MenuTitleScreen(this);
+            //this.currentMenu = new MenuTitleScreen(this);
+            this.mainMenu = new MenuTitleScreen(this);
+            this.currentMenu = this.mainMenu;
+            //this.currentMenu = new MenuDeath(this);
+
+            this.mainMenu.startGameEvent += StartGame;
+            this.mainMenu.loadGameEvent += LoadGame;
+            EntityPlayer.playerDeath += ChangeScene;
+            MenuDeath.restartGameEvent += StartGame;
+            MenuDeath.mainMenuEvent += MainMenu;
 
             graphics.PreferredBackBufferWidth = Settings.SCREEN_WIDTH * (int)Settings.PIXEL_RATIO;
             graphics.PreferredBackBufferHeight = Settings.SCREEN_HEIGHT * (int)Settings.PIXEL_RATIO;
@@ -58,8 +70,20 @@ namespace Zelda
             this.currentMenu = scene;
         }
 
+        private void StartGame()
+        {
+            this.currentMenu = new MenuGame();
+        }
+
+        private void MainMenu()
+        {
+            this.currentMenu = this.mainMenu;
+        }
+
         public void SaveGame()
         {
+            this.currentMenu.Save();
+
             BinaryFormatter binFormatter = new BinaryFormatter();
 
             using (FileStream file = new FileStream("save.dat", FileMode.OpenOrCreate))
@@ -68,7 +92,7 @@ namespace Zelda
             }
         }
 
-        public static MenuBase LoadGame()
+        public void LoadGame()
         {
             BinaryFormatter binFormatter = new BinaryFormatter();
 
@@ -78,12 +102,10 @@ namespace Zelda
                 {
                     MenuGame loadedScene = (MenuGame)binFormatter.Deserialize(file);
 
-                    //this.currentMenu = loadedScene;
                     loadedScene.Initialize();
 
-                    return loadedScene;
+                    this.ChangeScene(loadedScene);
                 }
-                return null;
             }
         }
 
@@ -91,15 +113,14 @@ namespace Zelda
         {
             this.currentState = Keyboard.GetState();
 
-            if (this.currentState.IsKeyDown(Keys.Escape))
-                Exit();
+            //if (this.currentState.IsKeyDown(Keys.Escape))
+            //    Exit();
 
             if (this.currentMenu is MenuGame)
             {
                 if (this.currentState.IsKeyDown(Keys.P))
                 {
                     this.SaveGame();
-                    Console.WriteLine("Saved!");
                 }
             }
 

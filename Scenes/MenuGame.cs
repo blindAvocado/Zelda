@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Zelda
 {
@@ -15,7 +17,7 @@ namespace Zelda
 
         public MenuGame() : base()
         {
-            this.player = new EntityPlayer(10);
+            this.player = new EntityPlayer(5);
             this.player.SetWeapon(Weapon.ForestBow);
             this.gui = new Sprite("gui", 0, 0);
 
@@ -25,18 +27,36 @@ namespace Zelda
 
         public override void Update(GameTime gameTime, Input input)
         {
-            this.dungeon.Update(gameTime, input);
+            if (input.IsKeyPressed(Keys.Space))
+            {
+                Game1.paused = !Game1.paused;
+            }
+
+            if (!Game1.paused)
+                this.dungeon.Update(gameTime, input);
         }
 
         public void Initialize()
         {
             this.gui = new Sprite("gui", 0, 0);
-            Console.WriteLine(this.player.Weapon);
-            this.player.Initialize();
+            this.dungeon.Initialize();
+            this.player.InitializeLoad();
+        }
+
+        public override void Save()
+        {
+            this.dungeon.Save();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //ЭКРАН ПАУЗЫ
+            if (Game1.paused)
+            {
+                spriteBatch.DrawString(Resources.Fonts["Bold"], "ПАУЗА", new Vector2(Settings.SCREEN_WIDTH / 2 - 30, Settings.SCREEN_HEIGHT / 2), Color.GhostWhite, 0, new Vector2(0, 0), 1.5f, SpriteEffects.None, 0.5f);
+                spriteBatch.Draw(Resources.Images["tiles"], new Rectangle(0, 0, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT), new Rectangle(32, 0, 16, 16), Color.White * 0.8f, 0f, new Vector2(0, 0), SpriteEffects.None, 0.4f);
+            }
+
             this.dungeon.Draw(spriteBatch);
             this.gui.Draw(spriteBatch);
 
@@ -63,6 +83,7 @@ namespace Zelda
             {
                 this.player.Weapon.Draw(spriteBatch);
             }
+
         }
     }
 }

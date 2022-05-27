@@ -14,11 +14,12 @@ namespace Zelda
         WEAPON,
     }
 
+    [Serializable]
     public abstract class Item
     {
-        protected Sprite sprite;
+        [NonSerialized] protected Sprite sprite;
         protected ItemType type;
-        protected Rectangle baseHitbox;
+        [NonSerialized] protected Rectangle baseHitbox;
 
         public Sprite GetSprite()
         {

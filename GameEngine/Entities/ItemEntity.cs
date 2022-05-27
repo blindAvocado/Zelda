@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Zelda
 {
+    [Serializable]
     public class ItemEntity : Entity
     {
         public Item item;

@@ -23,6 +23,7 @@ namespace Zelda
                 "room_border",
                 "tiles",
                 "gui",
+                "keyboard",
                 "heart",
                 "items",
                 "projectiles",
@@ -60,7 +61,9 @@ namespace Zelda
 
             List<string> fontsName = new List<string>()
             {
-                "Font"
+                "Font",
+                "Bold",
+                "Normal"
             };
 
             foreach (string font in fontsName)

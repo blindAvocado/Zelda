@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Zelda
 {
+    [Serializable]
     public class Room
     {
         public static int ROOM_WIDTH = 256;
@@ -16,14 +17,15 @@ namespace Zelda
         public static int ROOM_OFFSET_Y = (Settings.SCREEN_HEIGHT - ROOM_HEIGHT) + 32;
 
 
-        private Sprite roomBorder;
+        [NonSerialized] private Sprite roomBorder;
+        private char roomId;
         private EntityBlock[,] border;
         private EntityBlock[,] blocks;
         private List<Entity> entities;
-        private List<EntityBlookDoor> doors;
+        private List<EntityDoor> doors;
+        private bool empty;
 
-        //public static event Action<Vector2> collisionEvent;
-
+        public char RoomID { set { this.roomId = value; } }
 
         public Room(bool empty = false)
         {
@@ -31,10 +33,54 @@ namespace Zelda
             this.border = new EntityBlock[14, 9];
             this.blocks = new EntityBlock[12, 7];
             this.entities = new List<Entity>();
-            this.doors = new List<EntityBlookDoor>();
+            this.doors = new List<EntityDoor>();
+            this.empty = empty;
 
             if (empty)
                 this.InitializeEmptyRoom();
+        }
+
+        public void Initialize()
+        {
+            this.roomBorder = new Sprite("room_border", 0, Settings.SCREEN_HEIGHT - ROOM_HEIGHT);
+
+            foreach (EntityBlock block in this.border)
+            {
+                if (block is BlockFloor)
+                    Debug.WriteLine("FLOOR");
+                block?.InitializeLoad();
+            }
+
+            foreach (EntityBlock block in this.blocks)
+                block?.InitializeLoad();
+
+            foreach (Entity entity in this.entities)
+            {
+                if (entity is EnemyOctorok)
+                {
+                    Debug.WriteLine("OCTOROK");
+                }
+                entity?.InitializeLoad();
+            }
+
+            foreach (EntityDoor door in this.doors)
+                door?.InitializeLoad();
+
+        }
+
+        public void Save()
+        {
+            foreach (EntityBlock block in this.border)
+                block?.Save();
+
+            foreach (EntityBlock block in this.blocks)
+                block?.Save();
+
+            foreach (Entity entity in this.entities)
+                entity?.Save();
+
+            foreach (EntityDoor door in this.doors)
+                door?.Save();
         }
 
         public void InitializeEmptyRoom()
@@ -111,7 +157,6 @@ namespace Zelda
         {
             entity.SetPosition(Room.ROOM_OFFSET_X + (roomX * EntityBlock.WIDTH),
                                Room.ROOM_OFFSET_Y + (roomY * EntityBlock.HEIGHT));
-            entity.SetRoom(this);
             entity.UpdateSprite();
             this.entities.Add(entity);
         }
@@ -119,7 +164,6 @@ namespace Zelda
         public void SpawnProjectile(Entity entity, int x, int y)
         {
             entity.SetPosition(x, y);
-            entity.SetRoom(this);
             entity.UpdateSprite();
             this.entities.Add(entity);
         }
@@ -129,7 +173,6 @@ namespace Zelda
             ItemEntity entity = new ItemEntity(item,
                                Room.ROOM_OFFSET_X + (roomX * EntityBlock.WIDTH),
                                Room.ROOM_OFFSET_Y + (roomY * EntityBlock.HEIGHT));
-            entity.SetRoom(this);
             entity.UpdateSprite();
             this.entities.Add(entity);
         }
@@ -142,7 +185,7 @@ namespace Zelda
         public void AddDoor(Dungeon dungeon, Direction direction, DoorType type, Room room)
         {
             Door doorTemp = new Door(dungeon, direction, type, room);
-            EntityBlookDoor door = doorTemp.createDoor();
+            EntityDoor door = doorTemp.createDoor();
 
             int x = 0;
             int y = 0;
@@ -184,8 +227,6 @@ namespace Zelda
             foreach (Entity entity in new List<Entity>(this.entities))
             {
                 entity.Update(gameTime, input);
-                //if (entity is EntityPlayer)
-                //    Debug.WriteLine(entity + ": " + entity.Hitbox);
                 if (entity.IsDestroyed)
                 {
                     this.entities.Remove(entity);
@@ -211,7 +252,6 @@ namespace Zelda
                     {
                         if (entity.OnCollision(other))
                             entity.CancelMove(info.offset);
-                            //collisionEvent?.Invoke(info.offset);
                         if (entity.IsDestroyed)
                             this.entities.Remove(entity);
                     }
@@ -224,12 +264,12 @@ namespace Zelda
                     if (block.IsWalkable())
                         continue;
 
+
                     CollisionInfo info = entity.CollisionWith(block);
                     if (info.isCollision)
                     {
                         if (entity.OnCollision(block))
                             entity.CancelMove(info.offset);
-                            //collisionEvent?.Invoke(info.offset);
                         if (entity.IsDestroyed)
                             this.entities.Remove(entity);
                     }
@@ -241,18 +281,20 @@ namespace Zelda
                     if (block == null)
                         continue;
 
+                    //if (block is BlockHole)
+                    //    Debug.WriteLine(block.Hitbox);
+
                     CollisionInfo info = entity.CollisionWith(block);
                     if (info.isCollision)
                     {
                         if (entity.OnCollision(block))
                             entity.CancelMove(info.offset);
-                            //collisionEvent?.Invoke(info.offset);
                         if (entity.IsDestroyed)
                             this.entities.Remove(entity);
                     }
                 }
 
-                foreach (EntityBlookDoor door in this.doors)
+                foreach (EntityDoor door in this.doors)
                 {
                     CollisionInfo info = entity.CollisionWith(door);
                     if (info.isCollision)
@@ -267,10 +309,9 @@ namespace Zelda
 
                 entity.UpdateSprite();
             }
-            foreach (EntityBlookDoor door in this.doors)
+            foreach (EntityDoor door in this.doors)
             {
                 door.Update(gameTime, input);
-                //Debug.WriteLine(door + ": " + door.Hitbox);
             }
 
         }
@@ -281,7 +322,7 @@ namespace Zelda
 
             foreach (EntityBlock block in this.blocks)
                 block.Draw(spriteBatch);
-            foreach (EntityBlookDoor door in this.doors)
+            foreach (EntityDoor door in this.doors)
                 door.Draw(spriteBatch);
             foreach (Entity entity in this.entities)
                 entity.Draw(spriteBatch);

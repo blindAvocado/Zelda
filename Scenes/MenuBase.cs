@@ -15,6 +15,7 @@ namespace Zelda
 
         }
 
+        public abstract void Save();
         public abstract void Update(GameTime gameTime, Input input);
         public abstract void Draw(SpriteBatch spriteBatch);
     }
