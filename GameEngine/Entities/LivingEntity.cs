@@ -57,6 +57,7 @@ namespace Zelda
         public override void InitializeLoad()
         {
             this.weapon?.Initialize();
+            this.weapon?.SetOwner(this);
             this.animationFrame = 0;
             this.animationTimer = 0;
             this.colorTimer = HIT_TIMER;

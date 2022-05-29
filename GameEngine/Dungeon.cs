@@ -73,7 +73,7 @@ namespace Zelda
             map[startX, startY] = 's';
 
             GenerateRoomsAround(ref map, startX, startY);
-            
+
             for (int y = 0; y < height; ++y)
             {
                 for (int x = 0; x < width; ++x)
@@ -163,7 +163,6 @@ namespace Zelda
 
             if (end)
                 return;
-
 
             List<Point> freePlaces = new List<Point>();
 

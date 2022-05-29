@@ -43,6 +43,7 @@ namespace Zelda
             this.sprite = new Sprite("items", 124, 26, 8, 5, iconIndex % 8, iconIndex / 8);
             this.damage = damage;
             this.attackSpeed = attackSpeed;
+
             this.projectileIndex = projectileIndex;
             this.projectileSpeed = projectileSpeed;
             this.projectileWidth = projectileWidth;
@@ -51,6 +52,7 @@ namespace Zelda
             this.projectileOffsetY = projectileOffsetY;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
+
             this.projectile = new Projectile(projectileIndex, damage, this.attackSpeed, projectileSpeed, projectileWidth, projectileHeight, offsetX, offsetY);
             this.projectileOffset = new Point(projectileOffsetX, projectileOffsetY);
 
