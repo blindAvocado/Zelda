@@ -9,14 +9,8 @@ namespace Zelda
 {
     public class MenuHelp : MenuBase
     {
-        private Game1 game;
-
-        public MenuHelp(Game1 game) : base()
-        {
-            this.game = game;
-        }
-
-        public override void Save()
+        public static event Action mainMenuEvent;
+        public MenuHelp() : base()
         {
         }
 
@@ -24,7 +18,7 @@ namespace Zelda
         {
             if (input.IsKeyPressed(Keys.Escape))
             {
-                this.game.ChangeScene(game.GetMainMenu);
+                mainMenuEvent?.Invoke();
             }
         }
 

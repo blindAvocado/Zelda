@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 namespace Zelda
 {
     [Serializable]
-    class ItemWeapon : Item
+    public class ItemWeapon : Item
     {
         private Weapon weapon;
 

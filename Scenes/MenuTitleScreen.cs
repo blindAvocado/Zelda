@@ -9,25 +9,17 @@ namespace Zelda
 {
     public class MenuTitleScreen : MenuBase
     {
-        private List<string> options;
-        private int currentOption;
-        private int currentOptionY;
-        private Sprite selectIcon;
-        private Game1 game;
-
-        private int animationFrame;
-        private int animationTimer;
 
         public event Action startGameEvent;
         public event Action loadGameEvent;
+        public event Action helpMenuEvent;
 
-        public MenuTitleScreen(Game1 game) : base()
+        public MenuTitleScreen() : base()
         {
             this.options = new List<string>();
             this.currentOption = 0;
             this.currentOptionY = 150;
             this.selectIcon = new Sprite("select", 75, this.currentOptionY, 2, 1, 0);
-            this.game = game;
             
             this.animationFrame = 0;
             this.animationTimer = 0;
@@ -35,43 +27,6 @@ namespace Zelda
             this.options.Add("start");
             this.options.Add("load");
             this.options.Add("help");
-        }
-
-        public override void Save()
-        {
-        }
-
-        public void moveSelector(int index)
-        {
-            if (index > 0)
-            {
-                if (this.currentOption < this.options.Count - 1)
-                    this.currentOption += index;
-            }
-            else
-            {
-                if (this.currentOption > 0)
-                    this.currentOption += index;
-            }
-
-            this.selectIcon.UpdatePosition(75, this.currentOptionY + (this.currentOption * 15));
-        }
-
-        public void UpdateSpriteAnimation(GameTime gameTime)
-        {
-            this.animationTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (this.animationTimer >= 250)
-            {
-                this.animationTimer = 0;
-                if (this.animationFrame == 0)
-                    this.animationFrame = 1;
-                else
-                    this.animationFrame = 0;
-
-            }
-
-            this.selectIcon.SetCurrentFrame(this.animationFrame, 0);
         }
 
         public override void Update(GameTime gameTime, Input input)
@@ -97,7 +52,7 @@ namespace Zelda
                         loadGameEvent?.Invoke();
                         break;
                     case "help":
-                        game.ChangeScene(new MenuHelp(game));
+                        helpMenuEvent?.Invoke();
                         break;
                     default:
                         break;

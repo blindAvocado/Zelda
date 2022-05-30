@@ -15,7 +15,7 @@ namespace Zelda
         private int coins;
         private Room currentRoom;
 
-        public static event Action<MenuBase> playerDeath;
+        public static event Action playerDeath;
 
         public Room CurrentRoom { set { this.currentRoom = value; } }
 
@@ -55,6 +55,7 @@ namespace Zelda
                 {
                     case DoorType.OPEN:
                         door.Transport(this);
+                        //transportEvent?.Invoke(door.TargetRoom, this);
                         return true;
                     case DoorType.LOCKED:
                         break;
@@ -81,7 +82,7 @@ namespace Zelda
 
                 if (this.currentLife <= 0)
                 {
-                    playerDeath?.Invoke(new MenuDeath());
+                    playerDeath?.Invoke();
                     this.Destroy();
 
                 }

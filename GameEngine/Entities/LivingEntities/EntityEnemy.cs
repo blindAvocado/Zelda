@@ -48,12 +48,6 @@ namespace Zelda
             return false;
         }
 
-        public override void InitializeLoad()
-        {
-            //this.SetWeapon(Weapon.None);
-            base.InitializeLoad();
-        }
-
         public int GetRandomTimer()
         {
             Random rand = new Random();

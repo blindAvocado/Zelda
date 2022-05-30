@@ -105,7 +105,7 @@ namespace Zelda
             return hitbox;
         }
 
-        public EntityDoor createDoor()
+        public EntityDoor CreateDoor()
         {
             return new EntityDoor(this.dungeon, this.direction, this.type, this.room, this.sprite, this.hitbox);
         }

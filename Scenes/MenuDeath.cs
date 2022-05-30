@@ -7,16 +7,8 @@ using System.Text;
 
 namespace Zelda
 {
-    class MenuDeath : MenuBase
+    public class MenuDeath : MenuBase
     {
-        private List<string> options;
-        private int currentOption;
-        private int currentOptionY;
-        private Sprite selectIcon;
-
-        private int animationFrame;
-        private int animationTimer;
-
         public static event Action restartGameEvent;
         public static event Action mainMenuEvent;
 
@@ -33,43 +25,6 @@ namespace Zelda
             this.options.Add("restart");
             this.options.Add("menu");
 
-        }
-
-        public override void Save()
-        {
-        }
-
-        public void moveSelector(int index)
-        {
-            if (index > 0)
-            {
-                if (this.currentOption < this.options.Count - 1)
-                    this.currentOption += index;
-            }
-            else
-            {
-                if (this.currentOption > 0)
-                    this.currentOption += index;
-            }
-
-            this.selectIcon.UpdatePosition(75, this.currentOptionY + (this.currentOption * 15));
-        }
-
-        public void UpdateSpriteAnimation(GameTime gameTime)
-        {
-            this.animationTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (this.animationTimer >= 250)
-            {
-                this.animationTimer = 0;
-                if (this.animationFrame == 0)
-                    this.animationFrame = 1;
-                else
-                    this.animationFrame = 0;
-
-            }
-
-            this.selectIcon.SetCurrentFrame(this.animationFrame, 0);
         }
 
         public override void Update(GameTime gameTime, Input input)

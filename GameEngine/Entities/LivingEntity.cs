@@ -69,24 +69,6 @@ namespace Zelda
             base.InitializeLoad();
         }
 
-        public override void Save()
-        {
-            this.positionInt[0] = this.position.X;
-            this.positionInt[1] = this.position.Y;
-            this.positionInt[2] = this.position.Width;
-            this.positionInt[3] = this.position.Height;
-
-            this.baseHitboxInt[0] = this.baseHitbox.X;
-            this.baseHitboxInt[1] = this.baseHitbox.Y;
-            this.baseHitboxInt[2] = this.baseHitbox.Width;
-            this.baseHitboxInt[3] = this.baseHitbox.Height;
-
-            this.hitboxInt[0] = this.hitbox.X;
-            this.hitboxInt[1] = this.hitbox.Y;
-            this.hitboxInt[2] = this.hitbox.Width;
-            this.hitboxInt[3] = this.hitbox.Height;
-        }
-
         public virtual void Damage(int damage)
         {
             if (!this.invincible)

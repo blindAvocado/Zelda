@@ -10,21 +10,21 @@ namespace Zelda
     public class Weapon
     {
         public static Weapon None = null;
-        public static Weapon ForestSword = new Weapon(26, 1, 250, 0, 0, 7, 16, 5, 0);
-        public static Weapon ForestBow = new Weapon(21, 1, 500, 4, 5, 3, 16, 6, 0);
+        //public static Weapon ForestSword = new Weapon(26, 1, 250, 0, 0, 7, 16, 5, 0);
+        //public static Weapon ForestBow = new Weapon(21, 1, 500, 4, 5, 3, 16, 6, 0);
 
         protected int iconIndex;
         [NonSerialized] protected Sprite sprite;
         protected int damage;
         protected int attackSpeed;
-        private int projectileIndex;
-        private int projectileSpeed;
-        private int projectileWidth;
-        private int projectileHeight;
-        private int projectileOffsetX;
-        private int projectileOffsetY;
-        private int offsetX;
-        private int offsetY;
+        protected int projectileIndex;
+        protected int projectileSpeed;
+        protected int projectileWidth;
+        protected int projectileHeight;
+        protected int projectileOffsetX;
+        protected int projectileOffsetY;
+        protected int offsetX;
+        protected int offsetY;
         [NonSerialized] protected Projectile projectile;
         [NonSerialized] protected Point projectileOffset;
 

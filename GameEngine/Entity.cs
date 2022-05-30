@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,7 +21,6 @@ namespace Zelda
         protected int[] positionInt = new int[4];
         protected int[] baseHitboxInt = new int[4];
         protected int[] hitboxInt = new int[4];
-        protected bool isCreated;
         protected int roomX;
         protected int roomY;
 
@@ -36,7 +36,6 @@ namespace Zelda
 
             this.UpdateHitbox();
             this.UpdateSprite();
-            this.UpdateHitbox();
         }
 
         protected Entity(Sprite sprite, int x, int y)
@@ -62,7 +61,6 @@ namespace Zelda
                                         this.baseHitbox.Width,
                                         this.baseHitbox.Height);
             this.hasMoved = false;
-            this.isCreated = true;
             this.isDestroyed = false;
         }
 
@@ -77,13 +75,25 @@ namespace Zelda
             this.UpdateSprite();
         }
 
-        public virtual void Save()
+        public void Save()
         {
+            this.positionInt[0] = this.position.X;
+            this.positionInt[1] = this.position.Y;
+            this.positionInt[2] = this.position.Width;
+            this.positionInt[3] = this.position.Height;
 
+            this.baseHitboxInt[0] = this.baseHitbox.X;
+            this.baseHitboxInt[1] = this.baseHitbox.Y;
+            this.baseHitboxInt[2] = this.baseHitbox.Width;
+            this.baseHitboxInt[3] = this.baseHitbox.Height;
+
+            this.hitboxInt[0] = this.hitbox.X;
+            this.hitboxInt[1] = this.hitbox.Y;
+            this.hitboxInt[2] = this.hitbox.Width;
+            this.hitboxInt[3] = this.hitbox.Height;
         }
 
         public bool HasMoved { get { return this.hasMoved; } }
-        public bool IsCreated { get { return this.isCreated; } set { this.isCreated = value; } }
         public bool IsDestroyed { get { return this.isDestroyed;  } }
         public int RoomX
         {
@@ -125,10 +135,13 @@ namespace Zelda
             int x = (int)intersectionDepth.X;
             int y = (int)intersectionDepth.Y;
 
+            Debug.WriteLine(intersectionDepth);
+
             if (Math.Abs(x) > Math.Abs(y))
                 this.position.Y += y;
             else
                 this.position.X += x;
+
             this.UpdateHitbox();
         }
 

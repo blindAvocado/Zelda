@@ -185,7 +185,7 @@ namespace Zelda
         public void AddDoor(Dungeon dungeon, Direction direction, DoorType type, Room room)
         {
             Door doorTemp = new Door(dungeon, direction, type, room);
-            EntityDoor door = doorTemp.createDoor();
+            EntityDoor door = doorTemp.CreateDoor();
 
             int x = 0;
             int y = 0;
@@ -235,11 +235,8 @@ namespace Zelda
 
             foreach (Entity entity in new List<Entity>(this.entities))
             {
-                if (!entity.HasMoved && !entity.IsCreated)
+                if (!entity.HasMoved)
                     continue;
-
-                if (entity.IsCreated)
-                    entity.IsCreated = false;
 
                 // OTHER ENTITIES
                 foreach (Entity other in new List<Entity>(this.entities))

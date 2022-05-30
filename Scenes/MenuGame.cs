@@ -18,7 +18,7 @@ namespace Zelda
         public MenuGame() : base()
         {
             this.player = new EntityPlayer(5);
-            this.player.SetWeapon(Weapon.ForestBow);
+            this.player.SetWeapon(new WeaponForestBow());
             this.gui = new Sprite("gui", 0, 0);
 
             this.dungeon = new Dungeon(new Random(), 5, 5, this.player);
@@ -43,7 +43,7 @@ namespace Zelda
             this.player.InitializeLoad();
         }
 
-        public override void Save()
+        public void Save()
         {
             this.dungeon.Save();
         }

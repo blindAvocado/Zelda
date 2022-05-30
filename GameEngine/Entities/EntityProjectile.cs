@@ -62,11 +62,6 @@ namespace Zelda
                 if (!this.speed.Equals(Point.Zero))
                     this.Destroy();
             }
-            //if (other is BlockWall)
-            //{
-            //    if (!this.speed.Equals(Point.Zero))
-            //        this.Destroy();
-            //}
 
             return false;
         }
